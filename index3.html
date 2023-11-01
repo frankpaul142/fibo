@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fibonacci Spiral Animation with Psychedelic Colors</title>
+    <style>
+        canvas {
+            background-color: #000;
+            display: block;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="1200" height="800"></canvas>
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const spiralCount = 10;
+    const step = Math.PI / 100;
+    const goldenRatio = 1.61803398875;
+    let rotation = 0;
+    let baseRadiusIncreaseRate = 0.05;
+    let baseRadius = 20;
+
+    function drawSpiral() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        let angle = step;
+
+        for (let i = 0; i < spiralCount; i++) {
+            let radius = baseRadius * Math.pow(goldenRatio, i);
+            while (angle < 2 * Math.PI * (i + 1)) {
+                const x = centerX + radius * Math.cos(angle + rotation);
+                const y = centerY + radius * Math.sin(angle + rotation);
+                ctx.lineTo(x, y);
+                radius += step * 5;
+                angle += step;
+            }
+            angle = step;  // Reset the angle for the next spiral
+        }
+
+        // Sync hue with the baseRadius
+        const hue = baseRadius * 2 % 360;  // Modulo to keep hue in [0, 360] range
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        rotation += step;
+        baseRadius += baseRadiusIncreaseRate;
+
+        requestAnimationFrame(drawSpiral);
+    }
+
+    drawSpiral();
+
+</script>
+</body>
+</html>
