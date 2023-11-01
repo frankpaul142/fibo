@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fibonacci Spiral Animation</title>
+    <style>
+        canvas {
+            background-color: #000;
+            display: block;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="1200" height="800"></canvas>
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const spiralCount = 10;
+    const step = Math.PI / 100;
+    const goldenRatio = 1.61803398875;
+    let rotation = 0;
+    let baseRadiusIncreaseRate = 0.05;  // Adjust this value to change the growth speed
+    let baseRadius = 20;
+
+    function drawSpiral() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        let angle = step;
+
+        for (let i = 0; i < spiralCount; i++) {
+            let radius = baseRadius * Math.pow(goldenRatio, i); 
+            while (angle < 2 * Math.PI * (i + 1)) {
+                const x = centerX + radius * Math.cos(angle + rotation);
+                const y = centerY + radius * Math.sin(angle + rotation);
+                ctx.lineTo(x, y);
+                radius += step * 5; 
+                angle += step;
+            }
+            angle = step;  // Reset the angle for the next spiral
+        }
+
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        rotation += step;
+        baseRadius += baseRadiusIncreaseRate;  // Gradually increase the base radius over time
+        requestAnimationFrame(drawSpiral);
+    }
+
+    drawSpiral();
+
+</script>
+</body>
+</html>
